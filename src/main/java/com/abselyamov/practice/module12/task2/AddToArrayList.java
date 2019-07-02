@@ -1,20 +1,25 @@
 package com.abselyamov.practice.module12.task2;
 
 /**
- * @author Enver on 05.06.2019 15:33.
- * @project javacorepractice
+ *  This class has a constructor that allows you to create a collection with a default capacity of 16.
+ *  There is also a constructor that allows you to set the required collection capacity.
+ *  The class has methods that allow:
+ *  - add an item to the collection;
+ *  - update an item to the collection;
+ *  - determine the size of the collection;
+ *  - print collection.
  */
-public class CustomList<E> {
+public class AddToArrayList<E> {
 
     private Object[] data;
     private int size;
     private int capacity;
 
-    public CustomList() {
+    public AddToArrayList() {
         this(16);
     }
 
-    public CustomList(int capacity) {
+    public AddToArrayList(int capacity) {
         if (capacity > 0) {
             this.capacity = capacity;
             this.data = new Object[capacity];
@@ -29,11 +34,11 @@ public class CustomList<E> {
         if (size < capacity) {
             data[size++] = element;
         } else if (size == capacity) {
-            updateList(element);
+            update(element);
         }
     }
 
-    private void updateList(E element) {
+    private void update(E element) {
         E[] tempArray = (E[]) data;
         data[0] = null;
         System.arraycopy(tempArray, 1, data, 0, size - 1);
@@ -44,7 +49,7 @@ public class CustomList<E> {
         return data.length;
     }
 
-    public E[] printArrayList() {
+    public E[] printList() {
         for (int i = 0; i < data.length; i++) {
             System.out.println("  " + i + "   -   " + data[i]);
         }
