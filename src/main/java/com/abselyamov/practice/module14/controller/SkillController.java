@@ -1,26 +1,26 @@
 package com.abselyamov.practice.module14.controller;
 
 import com.abselyamov.practice.module14.model.Skill;
-import com.abselyamov.practice.module14.repository.SkillRepository;
+import com.abselyamov.practice.module14.repository.JavaIOSkillRepositoryImpl;
 import com.abselyamov.practice.module14.utils.GetID;
 
 import java.util.Set;
 import java.util.TreeSet;
 
 public class SkillController {
-    public static final String SKILLS_TXT = "src/main/java/com/abselyamov/practice/module14/database/skills.txt";
+    public static final String SKILLS_FILE = "src/main/java/com/abselyamov/practice/module14/database/skills.txt";
 
-    SkillRepository skillRepository = new SkillRepository();
+    JavaIOSkillRepositoryImpl skillRepository = new JavaIOSkillRepositoryImpl();
     GetID id = new GetID();
     TreeSet<Skill> skills;
 
     public void add(String skillName) {
-        Skill skill = new Skill(id.getID(), skillName);
-        skillRepository.save(skill);
+        Skill skill = new Skill(id.getID(SKILLS_FILE), skillName);
+        skillRepository.add(skill);
     }
 
-    public String getById(int id) {
-        skills = (TreeSet<Skill>) skillRepository.getSource();
+    public String getById(long id) {
+        skills = (TreeSet<Skill>) skillRepository.getData();
         for (Skill skill : skills) {
             if (skill.getId() == id) {
                 System.out.println("Skill with id \'" + id + "\' is: ");
@@ -32,7 +32,7 @@ public class SkillController {
     }
 
     public String getByName(String name) {
-        skills = (TreeSet<Skill>) skillRepository.getSource();
+        skills = (TreeSet<Skill>) skillRepository.getData();
         for (Skill skill : skills) {
             if (skill.getSkillName().equalsIgnoreCase(name)) {
                 System.out.println("Skill with name \'" + name + "\' exists.");
@@ -44,17 +44,20 @@ public class SkillController {
     }
 
     public Set<Skill> getListSkills() {
-        skills = (TreeSet<Skill>) skillRepository.getSource();
+        skills = (TreeSet<Skill>) skillRepository.getData();
         for (Skill skill : skills)
             System.out.println(skill.getId() + "\t" + skill.getSkillName());
         return skills;
     }
 
-    public void delete(int id) {
-        skills = (TreeSet<Skill>) skillRepository.getSource();
-        if (skillRepository.remove(id)) {
-            System.out.println("Skill with id \'" + id + "\' was remove.");
-            return;
+    public void delete(long id) {
+        skills = (TreeSet<Skill>) skillRepository.getData();
+        for (Skill skill : skills) {
+            if (skill.getId() == id) {
+                skillRepository.delete(skill);
+                System.out.println("Skill with id \'" + id + "\' was delete.");
+                return;
+            }
         }
         System.out.println("Skill with id \'" + id + "\' not found.");
     }

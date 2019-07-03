@@ -4,8 +4,8 @@ package com.abselyamov.practice.module12.task2;
  *  This class has a constructor that allows you to create a collection with a default capacity of 16.
  *  There is also a constructor that allows you to set the required collection capacity.
  *  The class has methods that allow:
- *  - add an item to the collection;
- *  - update an item to the collection;
+ *  - getAccount an item to the collection;
+ *  - checkAccount an item to the collection;
  *  - determine the size of the collection;
  *  - print collection.
  */

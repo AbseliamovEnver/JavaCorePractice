@@ -18,7 +18,7 @@ public class Main {
         System.out.println("========================================");
 
         arrayList.updateItem(2, 5);
-        System.out.println("Array list after update:");
+        System.out.println("Array list after checkAccount:");
         arrayList.printArrayListImp();
         System.out.println("========================================");
 

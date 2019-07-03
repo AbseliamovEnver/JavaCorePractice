@@ -13,7 +13,7 @@ public class SkillView {
     SkillController skill = new SkillController();
     ReadInputData readInputData = new ReadInputData();
 
-    public int skillMenu() {
+    public long skillMenu() {
         Map<Integer, String> skillMenu = new TreeMap<>();
 
         skillMenu.put(1, "Create skill.");
@@ -26,7 +26,7 @@ public class SkillView {
         Set<Map.Entry<Integer, String>> skillMenuSet = skillMenu.entrySet();
 
         menu.printMenu(skillMenuSet, "\tS K I L L S  ", 0, 5);
-        int select = readInputData.readInputInt(0, 5);
+        long select = readInputData.readInputData(0, 5);
 
         return select;
     }
@@ -34,8 +34,8 @@ public class SkillView {
     public void startSkillView() {
         boolean marker = true;
         while (marker) {
-            int select = skillMenu();
-            switch (select) {
+            long select = skillMenu();
+            switch ((int) select) {
                 case 0:
                     marker = false;
                     break;
@@ -45,7 +45,7 @@ public class SkillView {
                     break;
                 case 2:
                     System.out.println("Enter skill ID: ");
-                    System.out.println(skill.getById(readInputData.readInputInt(0, Integer.MAX_VALUE)));
+                    System.out.println(skill.getById(readInputData.readInputData(0, Long.MAX_VALUE)));
                     break;
                 case 3:
                     System.out.println("Enter skill name: ");
@@ -57,8 +57,8 @@ public class SkillView {
                     skill.getListSkills();
                     break;
                 case 5:
-                    System.out.println("Enter skill ID to remove: ");
-                    skill.delete(readInputData.readInputInt(0, Integer.MAX_VALUE));
+                    System.out.println("Enter skill ID to delete: ");
+                    skill.delete(readInputData.readInputData(0, Long.MAX_VALUE));
                     break;
                 default:
                     continue;

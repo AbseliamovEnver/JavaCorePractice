@@ -9,7 +9,7 @@ public class DeveloperView {
     PrintMenu menu = new PrintMenu();
     ReadInputData readInputData = new ReadInputData();
 
-    public int developerMenu() {
+    public long developerMenu() {
         Map<Integer, String> developerMenu = new TreeMap<>();
 
         developerMenu.put(1, "Create developer.");
@@ -21,7 +21,7 @@ public class DeveloperView {
         Set<Map.Entry<Integer, String>> mainMenuSet = developerMenu.entrySet();
 
         menu.printMenu(mainMenuSet, " D E V E L O P E R S  ", 0, 4);
-        int select = readInputData.readInputInt(0, 4);
+        long select = readInputData.readInputData(0, 4);
 
         return select;
     }
@@ -29,8 +29,8 @@ public class DeveloperView {
     public void startDeveloperView() {
         boolean marker = true;
         while (marker) {
-            int select = developerMenu();
-            switch (select) {
+            long select = developerMenu();
+            switch ((int) select) {
                 case 0:
                     marker = false;
                     break;

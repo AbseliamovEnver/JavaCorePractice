@@ -1,10 +1,10 @@
 package com.abselyamov.practice.module14.model;
 
 public class Skill implements Comparable<Skill>{
-    private int id;
+    private long id;
     private String skillName;
 
-    public Skill(int id, String skillName) {
+    public Skill(long id, String skillName) {
         this.id = id;
         this.skillName = skillName;
     }
@@ -17,11 +17,11 @@ public class Skill implements Comparable<Skill>{
         this.skillName = skillName;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -34,7 +34,26 @@ public class Skill implements Comparable<Skill>{
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Skill skill = (Skill) o;
+
+        if (id != skill.id) return false;
+        return skillName != null ? skillName.equals(skill.skillName) : skill.skillName == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (skillName != null ? skillName.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public int compareTo(Skill o) {
-        return this.id - o.getId();
+        return (int) (this.id - o.getId());
     }
 }

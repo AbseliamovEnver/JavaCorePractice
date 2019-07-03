@@ -3,7 +3,7 @@ package com.abselyamov.practice.module12.task1;
 /**
  *  Implementation of the CustomCollection for an ArrayList of integers.
  *  This class allows you to perform operations with an array of integers:
- *  - add
+ *  - getAccount
  *  - delete
  *  - search item by value
  *  - search for an item by index
