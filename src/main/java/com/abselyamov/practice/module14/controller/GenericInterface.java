@@ -1,15 +1,15 @@
 package com.abselyamov.practice.module14.controller;
 
-import java.util.List;
+import java.util.Set;
 
 public interface GenericInterface<T> {
     void add(T t);
 
     void update(T t);
 
-    void delete(int id);
+    void delete(long id);
 
-    T getItemById(int id);
+    T getItemById(long id);
 
-    List<T> listItem();
+    Set<T> listItem();
 }

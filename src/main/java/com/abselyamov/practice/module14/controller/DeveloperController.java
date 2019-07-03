@@ -1,14 +1,17 @@
 package com.abselyamov.practice.module14.controller;
 
-import java.util.List;
+import com.abselyamov.practice.module14.model.Developer;
+import com.abselyamov.practice.module14.repository.JavaIODeveloperRepositoryImpl;
 
-public class DeveloperController<Developer> implements GenericInterface<Developer> {
+import java.util.Set;
 
-    private List<Developer> developerList;
+public class DeveloperController implements GenericInterface<Developer> {
+    public static final String DEVELOPER_FILE = "src/main/java/com/abselyamov/practice/module14/database/developers.txt";
+    JavaIODeveloperRepositoryImpl developerRepository = new JavaIODeveloperRepositoryImpl();
 
     @Override
     public void add(Developer developer) {
-        developerList.add(developer);
+        developerRepository.add(developer);
     }
 
     @Override
@@ -17,20 +20,17 @@ public class DeveloperController<Developer> implements GenericInterface<Develope
     }
 
     @Override
-    public void delete(int id) {
-        if (developerList.contains(getItemById(id)))
-            developerList.remove(id);
-        else
-            System.out.println("User with id = " + id + " not found");
+    public void delete(long id) {
+        System.out.println("User with id = " + id + " not found");
     }
 
     @Override
-    public Developer getItemById(int id) {
-        return developerList.get(id);
+    public Developer getItemById(long id) {
+        return null;
     }
 
     @Override
-    public List<Developer> listItem() {
-        return developerList;
+    public Set<Developer> listItem() {
+        return null;
     }
 }

@@ -1,7 +1,5 @@
 package com.abselyamov.practice.module14.model;
 
-import java.io.Serializable;
-
 public class Account implements Comparable<Account> {
     private long id;
     private String login;
@@ -13,6 +11,10 @@ public class Account implements Comparable<Account> {
         this.login = login;
         this.password = password;
         this.status = status;
+    }
+
+    public Account(Account account) {
+
     }
 
     public long getId() {

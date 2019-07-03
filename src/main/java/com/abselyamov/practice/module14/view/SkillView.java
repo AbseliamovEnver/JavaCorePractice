@@ -52,8 +52,7 @@ public class SkillView {
                     System.out.println(skill.getByName(readInputData.readInputString()));
                     break;
                 case 4:
-                    System.out.println("List skills: ");
-                    System.out.println("ID\tSKILLS");
+                    System.out.println("List skills: \nID\tSKILLS");
                     skill.getListSkills();
                     break;
                 case 5:

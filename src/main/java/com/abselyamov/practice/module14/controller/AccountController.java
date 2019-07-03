@@ -3,14 +3,12 @@ package com.abselyamov.practice.module14.controller;
 import com.abselyamov.practice.module14.model.Account;
 import com.abselyamov.practice.module14.model.AccountStatus;
 import com.abselyamov.practice.module14.repository.JavaIOAccountRepositoryImpl;
-import com.abselyamov.practice.module14.utils.FileIO;
 import com.abselyamov.practice.module14.utils.GetID;
 
 import java.util.Set;
 
 public class AccountController {
     public static final String ACCOUNT_FILE = "src/main/java/com/abselyamov/practice/module14/database/accounts.txt";
-    FileIO<Account> fileIO = new FileIO();
     GetID id = new GetID();
     JavaIOAccountRepositoryImpl javaIOAccountRepository = new JavaIOAccountRepositoryImpl();
 
