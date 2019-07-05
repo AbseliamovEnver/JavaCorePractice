@@ -8,12 +8,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class MainMenu {
-    PrintMenu menu = new PrintMenu();
-    DeveloperView developerView = new DeveloperView();
-    AccountView accountView = new AccountView();
-    SkillView skillView = new SkillView();
-    ReadInputData readInputData = new ReadInputData();
-
     public long mainMenu() {
         Map<Integer, String> mainMenu = new TreeMap<>();
 
@@ -24,8 +18,8 @@ public class MainMenu {
 
         Set<Map.Entry<Integer, String>> mainMenuSet = mainMenu.entrySet();
 
-        menu.printMenu(mainMenuSet, "\t M A I N  ", 0, 3);
-        long select = readInputData.readInputData(0, 3);
+        PrintMenu.printMenu(mainMenuSet, "\t M A I N  ", 0, 3);
+        long select = ReadInputData.readInputData(0, 3);
 
         if (select == 0)
             System.out.println(" THANKS FOR USING OUR APPLICATION!");
@@ -34,6 +28,10 @@ public class MainMenu {
     }
 
     public void start() {
+        DeveloperView developerViewMenu = new DeveloperView();
+        SkillView skillViewMenu = new SkillView();
+        AccountView accountViewMenu = new AccountView();
+
         while (true) {
             long select = mainMenu();
             switch ((int) select) {
@@ -41,13 +39,13 @@ public class MainMenu {
                     System.exit(0);
                     break;
                 case 1:
-                    developerView.startDeveloperView();
+                    developerViewMenu.developerView();
                     break;
                 case 2:
-                    skillView.startSkillView();
+                    skillViewMenu.skillView();
                     break;
                 case 3:
-                    accountView.startAccountView();
+                    accountViewMenu.accountView();
                 default:
                     continue;
             }

@@ -5,7 +5,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class GetID {
-    public long getID(String path) {
+    public static long getID(String path) {
         SortedSet<String> strings = new TreeSet<>();
         long lastId = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {

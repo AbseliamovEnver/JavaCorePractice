@@ -2,3 +2,5 @@
 1	Vasya	Pupkin	[Skill{id=0, skillName='Maven'}]	id = 3	login = '5555'		status = BANNED
 2	Developer	DevSurname	[Skill{id=0, skillName='Maven'}, Skill{id=1, skillName='SQL'}]	id = 4	login = 'Logs'		status = ACTIVE
 3	Ivan	Ivanov	[Skill{id=1, skillName='SQL'}, Skill{id=2, skillName='Git'}]	id = 1	login = '7777'		status = DELETED
+4	lll	0	[]	null
+5	Kolya	Pervuy	[Skill{id=1, skillName='www'}]	id = 0	login = 'hhhh'		status = ACTIVE

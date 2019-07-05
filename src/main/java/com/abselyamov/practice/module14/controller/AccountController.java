@@ -2,15 +2,13 @@ package com.abselyamov.practice.module14.controller;
 
 import com.abselyamov.practice.module14.model.Account;
 import com.abselyamov.practice.module14.model.AccountStatus;
+import com.abselyamov.practice.module14.repository.AccountRepository;
 import com.abselyamov.practice.module14.repository.JavaIOAccountRepositoryImpl;
-import com.abselyamov.practice.module14.utils.GetID;
 
 import java.util.Set;
 
 public class AccountController {
-    public static final String ACCOUNT_FILE = "src/main/java/com/abselyamov/practice/module14/database/accounts.txt";
-    GetID id = new GetID();
-    JavaIOAccountRepositoryImpl javaIOAccountRepository = new JavaIOAccountRepositoryImpl();
+    AccountRepository accountRepository = new JavaIOAccountRepositoryImpl();
 
     public void add(String login, String password, Long status) {
         AccountStatus accountStatus = null;
@@ -18,48 +16,61 @@ public class AccountController {
             if (status == i)
                 accountStatus = AccountStatus.values()[i];
         }
-        Account account = new Account(id.getID(ACCOUNT_FILE), login, password, accountStatus);
-        javaIOAccountRepository.add(account);
+        Account account = new Account(0, login, password, accountStatus);
+        accountRepository.add(account);
+    }
+
+    public String getById(long id) {
+        Account account = accountRepository.getById(id);
+        if (account != null)
+            return "Account with id \'" + id + "\' have login \'"
+                    + account.getLogin() + "\' and status \'" + account.getStatus() + "\'";
+        return "Account with id \'" + id + "\' not found.";
+    }
+
+    public String getByName(String login) {
+        Account account = accountRepository.getByName(login);
+        if (account != null)
+            return "Account with login \'" + account.getLogin() + "\' have id \'"
+                    + account.getId() + "\' and status \'" + account.getStatus() + "\'";
+        return "Account with name \'" + login + "\' not found.";
+    }
+
+    public Set<Account> getListAccounts() {
+        Set<Account> accounts = accountRepository.getAll();
+        if (accounts != null) {
+            for (Account account : accounts)
+                System.out.println(account.getId() + "\t" + account.getLogin() + "\t" + account.getStatus());
+            return accounts;
+        } else System.out.println("List accounts is empty.");
+        return null;
     }
 
     public void update(long id, String login, String password, long status) {
-        Account account = getById(id);
         AccountStatus accountStatus = null;
-        if (login.isEmpty())
-            login = account.getLogin();
-        if (password.isEmpty())
-            password = account.getPassword();
         for (int i = 0; i < AccountStatus.values().length; i++) {
             if (status == i)
                 accountStatus = AccountStatus.values()[i];
         }
-        javaIOAccountRepository.update(id, login, password, accountStatus);
+        boolean update = accountRepository.update(new Account(id, login, password, accountStatus));
+        if (update)
+            System.out.println("Update account is successful");
+        else System.out.println("Account update failed.");
+
     }
 
-    public Account getById(long id) {
-        Set<Account> accounts = getAll();
-        for (Account account : accounts) {
-            if (account.getId() == id) {
-                return account;
-            }
-        }
-        return null;
-    }
-
-    public Set<Account> getAll() {
-        for (Account account : javaIOAccountRepository.getAll()) {
-            System.out.println(account);
-        }
-        return javaIOAccountRepository.getAll();
-    }
-
-    public void delete(Account account){
-        javaIOAccountRepository.delete(account);
+    public void delete(Long id) {
+        Account account = accountRepository.delete(id);
+        if (account != null)
+            System.out.println("Account with id \'" + account.getId() + "\' and login \'"
+                    + account.getLogin() + "\' deleted successfully.");
+        else
+            System.out.println("Skill with id \'" + id + "\' not found.");
     }
 
     public boolean checkAccount(Long id, String pass) {
-        Account account = getById(id);
-        if (account.getPassword().equals(pass))
+        Account account = accountRepository.checkAccount(id, pass);
+        if (account != null)
             return true;
         return false;
     }

@@ -1,6 +1,7 @@
 package com.abselyamov.practice.module14.model;
 
 public class Account implements Comparable<Account> {
+    public static final String ACCOUNTS_FILE = "src/main/java/com/abselyamov/practice/module14/database/accounts.txt";
     private long id;
     private String login;
     private String password;

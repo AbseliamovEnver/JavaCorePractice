@@ -1,9 +1,9 @@
 package com.abselyamov.practice.module14.model;
 
-import java.io.Serializable;
 import java.util.Set;
 
-public class Developer implements Serializable {
+public class Developer {
+    public static final String DEVELOPER_FILE = "src/main/java/com/abselyamov/practice/module14/database/developers.txt";
     private long id;
     private String name;
     private String surName;
@@ -85,12 +85,7 @@ public class Developer implements Serializable {
 
     @Override
     public String toString() {
-        return "Developer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surName='" + surName + '\'' +
-                ", skills=" + skills +
-                ", account=" + account +
-                '}';
+        return "Developer:" + "\tid = " + id + ", name = \'" + name + "\'" + ", surName = \'" + surName + "\'" +
+                ", skills = \'" + skills + "\', account = \'" + account + "\'";
     }
 }

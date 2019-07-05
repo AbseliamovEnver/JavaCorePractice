@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class PrintMenu {
-    public void printMenu(Set<Map.Entry<Integer, String>> menu, String nameMenu, int minItem, int maxItem) {
+    public static void printMenu(Set<Map.Entry<Integer, String>> menu, String nameMenu, int minItem, int maxItem) {
 
         System.out.println("*********************************");
         System.out.println(nameMenu + " M E N U");

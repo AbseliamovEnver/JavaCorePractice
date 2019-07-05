@@ -1,20 +1,11 @@
 package com.abselyamov.practice.module14.utils;
 
-import com.abselyamov.practice.module14.controller.SkillController;
-import com.abselyamov.practice.module14.model.Skill;
-
 import java.io.*;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class ReadInputData {
-    private BufferedReader reader;
+    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public ReadInputData() {
-        this.reader = new BufferedReader(new InputStreamReader(System.in));
-    }
-
-    public String readInputString() {
+    public static String readInputString() {
         String data = null;
         try {
             data = reader.readLine();
@@ -24,7 +15,7 @@ public class ReadInputData {
         return data;
     }
 
-    public long readInputData(long min, long max) {
+    public static long readInputData(long min, long max) {
         boolean marker = true;
         long select = 0;
         while (marker) {
@@ -41,23 +32,4 @@ public class ReadInputData {
         }
         return select;
     }
-
-//    public Set getData(String path) {
-//        Set set = new TreeSet<>();
-//
-//        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-//            File file = new File(path);
-//            if (file.exists() && file.length() != 0) {
-//                String data;
-//                while ((data = reader.readLine()) != null) {
-//                    String[] arrayStr = data.split("\t");
-//                    for (int i = 0; i < arrayStr.length; i++)
-//                        set.add(arrayStr[0]);
-//                }
-//            }
-//        } catch (IOException e) {
-//            System.out.println("Exception read the file: " + e);
-//        }
-//        return set;
-//    }
 }

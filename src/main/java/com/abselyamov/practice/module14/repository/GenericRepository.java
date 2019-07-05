@@ -8,8 +8,10 @@ public interface GenericRepository<T, ID> {
 
     T getById(ID id);
 
+    T getByName(String name);
+
     Set<T> getAll();
 
-    void delete(T t);
+    T delete(ID id);
 
 }

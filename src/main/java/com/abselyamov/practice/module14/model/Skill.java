@@ -1,6 +1,7 @@
 package com.abselyamov.practice.module14.model;
 
 public class Skill implements Comparable<Skill>{
+    public static final String SKILLS_FILE = "src/main/java/com/abselyamov/practice/module14/database/skills.txt";
     private long id;
     private String skillName;
 
