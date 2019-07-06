@@ -65,7 +65,7 @@ public class AccountController {
             System.out.println("Account with id \'" + account.getId() + "\' and login \'"
                     + account.getLogin() + "\' deleted successfully.");
         else
-            System.out.println("Skill with id \'" + id + "\' not found.");
+            System.out.println("Account with id \'" + id + "\' not found.");
     }
 
     public boolean checkAccount(Long id, String pass) {

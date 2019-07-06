@@ -2,6 +2,7 @@ package com.abselyamov.practice.module14.repository;
 
 import com.abselyamov.practice.module14.model.Developer;
 import com.abselyamov.practice.module14.model.Skill;
+import com.abselyamov.practice.module14.utils.GetDeveloperList;
 import com.abselyamov.practice.module14.utils.GetID;
 
 import java.io.*;
@@ -41,75 +42,119 @@ public class JavaIODeveloperRepositoryImpl implements DeveloperRepository {
 
     @Override
     public Developer getById(Long id) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(Developer.DEVELOPER_FILE))) {
-            File file = new File(Developer.DEVELOPER_FILE);
-            if (file.exists() && file.length() != 0) {
-                String data;
-                while ((data = reader.readLine()) != null) {
-                    String[] developerData = data.split("\t");
-                    if (Long.parseLong(developerData[0]) == id)
-                        return new Developer(id, developerData[1], developerData[2], null, null);
+        File file = new File(Developer.DEVELOPER_FILE);
+        Set<Developer> developers;
+
+        if (file.exists() && file.length() != 0) {
+            developers = GetDeveloperList.getDevelopers(file);
+            for (Developer developer : developers) {
+                if (developer.getId() == id) {
+                    return developer;
                 }
-            } else System.out.println("File with developers is empty");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("Exception reading file in method get developer by id: " + e);
-        }
+            }
+        } else System.out.println("File with developers is empty");
         return null;
     }
 
+
     @Override
     public Developer getByName(String name) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(Developer.DEVELOPER_FILE))) {
-            File file = new File(Developer.DEVELOPER_FILE);
-            if (file.exists() && file.length() != 0) {
-                String data;
-                while ((data = reader.readLine()) != null) {
-                    String[] developerData = data.split("\t");
-                    if (developerData[1].equalsIgnoreCase(name))
-                        return new Developer(Long.parseLong(developerData[0]), developerData[1], developerData[2],
-                                null, null);
-                }
-            } else System.out.println("File with developers is empty");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("Exception reading file in method get developer by name: " + e);
-        }
+        File file = new File(Developer.DEVELOPER_FILE);
+        Set<Developer> developers;
+
+        if (file.exists() && file.length() != 0) {
+            developers = GetDeveloperList.getDevelopers(file);
+            for (Developer developer : developers) {
+                if (developer.getName().equals(name))
+                    return developer;
+            }
+        } else System.out.println("File with developers is empty");
         return null;
     }
 
     @Override
     public Set<Developer> getAll() {
-        Set<Developer> developers = new HashSet<>();
-        Set<Skill> skills = null;
-        try (BufferedReader reader = new BufferedReader(new FileReader(Developer.DEVELOPER_FILE))) {
-            File file = new File(Developer.DEVELOPER_FILE);
-            if (file.exists() && file.length() != 0) {
-                String data;
-                while ((data = reader.readLine()) != null) {
-                    String[] developerData = data.split("\t");
-//                    developers.add(new Developer(Long.parseLong(developerData[0]), developerData[1],
-//                            developerData[2], ));
-                }
-                return developers;
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("Exception reading file in method get all accounts: " + e);
-        }
-        return null;
+        File file = new File(Developer.DEVELOPER_FILE);
+        Set<Developer> developers = null;
+
+        if (file.exists() && file.length() != 0) {
+            developers = GetDeveloperList.getDevelopers(file);
+        } else System.out.println("File with developers is empty");
+        return developers;
     }
 
     @Override
     public void update(Developer developer, Long id) {
+        Developer developer1;
 
+        File file = new File(Developer.DEVELOPER_FILE);
+        if (file.exists() && file.length() != 0) {
+            Set<Developer> developers = GetDeveloperList.getDevelopers(file);
+            for (Developer developerItem : developers) {
+                if (developerItem.getId() == id)
+                    developer1 = new Developer(developerItem);
+            }
+        }
     }
 
     @Override
     public Developer delete(Long id) {
-        return null;
+        Set<Developer> developers = new HashSet<>();
+        Developer developerDelete = null;
+        boolean deleteDeveloper = false;
+
+        File file = new File(Developer.DEVELOPER_FILE);
+        if (file.exists() && file.length() != 0) {
+            Set<Developer> developerList = GetDeveloperList.getDevelopers(file);
+            for (Developer developer : developerList) {
+                if (developer.getId() == id) {
+                    developerDelete = new Developer(developer.getId(), developer.getName(), developer.getSurName(),
+                            developer.getSkills(), developer.getAccount());
+                    deleteDeveloper = true;
+                    continue;
+                }
+                developers.add(new Developer(developer.getId(), developer.getName(), developer.getSurName(),
+                        developer.getSkills(), developer.getAccount()));
+            }
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Developer.DEVELOPER_FILE, false))) {
+            if (deleteDeveloper) {
+                for (Developer developer : developers)
+                    writer.write(developer.getId() + "\t" + developer.getName() + "\t" + developer.getSurName()
+                            + "\t" + developer.getSkills() + "\t" + developer.getAccount() + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Exception writing file in method delete developer: " + e);
+        }
+        return developerDelete;
+    }
+
+    @Override
+    public boolean addSkillDeveloper(Developer developer, Skill skill) {
+        Set<Skill> skills = new HashSet<>();
+        boolean addSkill = false;
+
+        File file = new File(Developer.DEVELOPER_FILE);
+        if (file.exists() && file.length() != 0) {
+            Set<Developer> developerList = GetDeveloperList.getDevelopers(file);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(Developer.DEVELOPER_FILE, false))) {
+                for (Developer developerItem : developerList) {
+                    if (developerItem.getId() == developer.getId()) {
+                        skills = developer.getSkills();
+                        skills.add(skill);
+                        writer.write(developer.getId() + "\t" + developer.getName() + "\t" + developer.getSurName()
+                                + "\t" + skills + "\t" + developer.getAccount() + "\n");
+                        addSkill = true;
+                        continue;
+                    }
+                    writer.write(developerItem.getId() + "\t" + developerItem.getName() + "\t" + developerItem.getSurName()
+                            + "\t" + developerItem.getSkills() + "\t" + developerItem.getAccount() + "\n");
+                }
+            } catch (IOException e) {
+                System.out.println("Exception writing file in method delete developer: " + e);
+            }
+        }
+        return addSkill;
     }
 }

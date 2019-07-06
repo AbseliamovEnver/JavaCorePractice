@@ -18,6 +18,10 @@ public class Developer {
         this.account = account;
     }
 
+    public Developer(Developer developer) {
+
+    }
+
     public long getId() {
         return id;
     }
@@ -85,7 +89,7 @@ public class Developer {
 
     @Override
     public String toString() {
-        return "Developer:" + "\tid = " + id + ", name = \'" + name + "\'" + ", surName = \'" + surName + "\'" +
-                ", skills = \'" + skills + "\', account = \'" + account + "\'";
+        return "Developer:\n" + "\tid = " + id + ",\n\tname = \'" + name + "\'" + ",\n\tsurName = \'" + surName + "\'" +
+                ",\n\tskills:\n\t\t" + skills + "\'\n\taccount:\n\t\t" + account;
     }
 }

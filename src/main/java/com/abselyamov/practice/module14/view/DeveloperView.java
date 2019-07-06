@@ -24,8 +24,8 @@ public class DeveloperView {
 
         Set<Map.Entry<Integer, String>> mainMenuSet = developerMenu.entrySet();
 
-        PrintMenu.printMenu(mainMenuSet, " D E V E L O P E R S  ", 0, 4);
-        long select = ReadInputData.readInputData(0, 4);
+        PrintMenu.printMenu(mainMenuSet, " D E V E L O P E R S  ", 0, 6);
+        long select = ReadInputData.readInputData(0, 6);
 
         return select;
     }
@@ -103,8 +103,40 @@ public class DeveloperView {
                     System.out.println(developerController.getByName(ReadInputData.readInputString()));
                     break;
                 case 4:
-                    System.out.println("List skills: \nID\tSKILLS");
+                    System.out.println("List od all DEVELOPERS:");
                     developerController.getListDeveloper();
+                    break;
+                case 5:
+                    System.out.println("List od all DEVELOPERS:");
+                    developerController.getListDeveloper();
+                    System.out.println("Choose developer id to update: ");
+                    long developerId = ReadInputData.readInputData(0, Long.MAX_VALUE);
+                    if (developerController.checkDeveloper(developerId)) {
+                        System.out.println("Enter new name or press \'ENTER\' to leave old name: ");
+                        String newName = ReadInputData.readInputString();
+                        System.out.println("Enter new surname or press \'ENTER\' to leave old surname: ");
+                        String newSurname = ReadInputData.readInputString();
+                        System.out.println("If you want to add skills enter \'Y\' or \'N\' to continue.");
+                        String addSkill = ReadInputData.readInputString();
+                        if (addSkill.equalsIgnoreCase("Y")) {
+                            Set<Skill> skillSet1 = skill.getListSkills();
+                            System.out.println("Chose new skill id: ");
+                            long skillNewId = ReadInputData.readInputData(0, Long.MAX_VALUE);
+                            if (developerController.checkDeveloperSkill(skillSet1, developerId))
+                                System.out.println("Skill with id " + skillNewId + " added.");
+
+                        }
+                        System.out.println("List skills: \nID\tSKILLS");
+                        System.out.println("Select developer skills or enter \'-1\': ");
+                        System.out.println("U P D A T E");
+                        developerController.update(newName, newSurname);
+                    }
+                    break;
+                case 6:
+                    System.out.println("List of all DEVELOPERS:");
+                    developerController.getListDeveloper();
+                    System.out.println("Choose developer id to remove: ");
+                    developerController.delete(ReadInputData.readInputData(0, Long.MAX_VALUE));
                     break;
                 default:
                     continue;

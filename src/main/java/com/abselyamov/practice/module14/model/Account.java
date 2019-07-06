@@ -52,7 +52,7 @@ public class Account implements Comparable<Account> {
 
     @Override
     public String toString() {
-        return "id = " + id + "\tlogin = '" + login + '\'' + "\t\tstatus = " + status;
+        return "id = " + id + "\tlogin = '" + login + '\'' + "\tstatus = " + status;
     }
 
     @Override
