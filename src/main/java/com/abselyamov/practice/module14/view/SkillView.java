@@ -1,6 +1,7 @@
 package com.abselyamov.practice.module14.view;
 
 import com.abselyamov.practice.module14.controller.SkillController;
+import com.abselyamov.practice.module14.model.Skill;
 import com.abselyamov.practice.module14.utils.PrintMenu;
 import com.abselyamov.practice.module14.utils.ReadInputData;
 
@@ -30,31 +31,90 @@ public class SkillView {
     public void skillView() {
         SkillController skillController = new SkillController();
         boolean marker = true;
+        boolean menu = true;
+        long select;
+
         while (marker) {
-            long select = skillMenu();
+            select = menu ? skillMenu() : 1;
             switch ((int) select) {
                 case 0:
                     marker = false;
                     break;
                 case 1:
-                    System.out.println("Enter skill name:");
-                    skillController.add(ReadInputData.readInputString());
+                    System.out.println("If you want to create a new skill enter \'Y\' or other key to continue:");
+                    if (ReadInputData.readInputString().equalsIgnoreCase("Y")) {
+                        System.out.println("Enter skill name:");
+                        skillController.add(ReadInputData.readInputString());
+
+                        menu = false;
+                    } else
+                        menu = true;
                     break;
                 case 2:
-                    System.out.println("Enter skill ID: ");
-                    System.out.println(skillController.getById(ReadInputData.readInputData(0, Long.MAX_VALUE)));
+                    if (skillController.getListSkills() != null) {
+                        System.out.println("Enter skill ID or enter \'-1\' to continue: ");
+                        long id;
+                        while ((id = ReadInputData.readInputData(-1, Long.MAX_VALUE)) != -1) {
+                            Skill skill = skillController.getById(id);
+                            if (skill != null) {
+                                System.out.println("Skill with id: \'" + id + "\' have value \'"
+                                        + skill.getSkillName() + "\'.");
+                                System.out.println("Select other skill id or enter \'-1\' to continue:");
+                            } else {
+                                System.out.println("Skill with id \'" + id + "\' not found.");
+                                System.out.println("Select correct skill id or enter \'-1\' to continue:");
+                            }
+                        }
+                    } else {
+                        System.out.println("Please create new skill.");
+                        menu = false;
+                    }
                     break;
                 case 3:
-                    System.out.println("Enter skill name: ");
-                    System.out.println(skillController.getByName(ReadInputData.readInputString()));
+                    if (skillController.getListSkills() != null) {
+                        System.out.println("Enter skill name or enter \'-1\' to continue: ");
+                        String name;
+                        while (!(name = ReadInputData.readInputString()).equals("-1")) {
+                            Skill skill = skillController.getByName(name);
+                            if (skill != null) {
+                                System.out.println("Skill with name: \'" + name + "\' have id \'" + skill.getId() + "\'.");
+                                System.out.println("Select other skill name or enter \'-1\' to continue:");
+                            } else {
+                                System.out.println("Skill with name \'" + name + "\' not found.");
+                                System.out.println("Select correct skill name or enter \'-1\' to continue:");
+                            }
+                        }
+                    } else {
+                        System.out.println("Please create new skill.");
+                        menu = false;
+                    }
                     break;
                 case 4:
                     System.out.println("List skills: \nID\tSKILLS");
-                    skillController.getListSkills();
+                    if (skillController.getListSkills() == null) {
+                        System.out.println("Please create new skill.");
+                        menu = false;
+                    }
                     break;
                 case 5:
-                    System.out.println("Enter skill ID to delete: ");
-                    skillController.delete(ReadInputData.readInputData(0, Long.MAX_VALUE));
+                    if (skillController.getListSkills() != null) {
+                        System.out.println("Enter skill ID to delete or \'-1\' to continue: ");
+                        long id;
+                        while ((id = ReadInputData.readInputData(-1, Long.MAX_VALUE)) != -1) {
+                            Skill skill = skillController.delete(id);
+                            if (skill != null) {
+                                System.out.println("Skill with id: \'" + id + "\' and name \'"
+                                        + skill.getSkillName() + "\' deleted successfully.");
+                                System.out.println("Select other skill id or enter \'-1\' to continue:");
+                            } else {
+                                System.out.println("Skill with id \'" + id + "\' not found.");
+                                System.out.println("Select correct skill id or enter \'-1\' to continue:");
+                            }
+                        }
+                    } else {
+                        System.out.println("Please create new skill.");
+                        menu = false;
+                    }
                     break;
                 default:
                     continue;

@@ -14,18 +14,16 @@ public class SkillController {
         skillRepository.add(skill);
     }
 
-    public String getById(long id) {
+    public Skill getById(long id) {
         Skill skill = skillRepository.getById(id);
-        if (skill != null)
-            return "Skill with id \'" + id + "\' have value \'" + skill.getSkillName() + "\'.";
-        return "Skill with id \'" + id + "\' not found.";
+        skill = skill != null ? skill : null;
+        return skill;
     }
 
-    public String getByName(String name) {
+    public Skill getByName(String name) {
         Skill skill = skillRepository.getByName(name);
-        if (skill != null)
-            return "Skill with name \'" + skill.getSkillName() + "\' have id \'" + skill.getId() + "\'.";
-        return "Skill with name \'" + name + "\' not found.";
+        skill = skill != null ? skill : null;
+        return skill;
     }
 
     public Set<Skill> getListSkills() {
@@ -38,11 +36,9 @@ public class SkillController {
         return null;
     }
 
-    public void delete(Long id) {
+    public Skill delete(Long id) {
         Skill skill = skillRepository.delete(id);
-        if (skill != null)
-            System.out.println("Skill with id \'" + skill.getId() + "\' and value \'" + skill.getSkillName() + "\' was delete.");
-        else
-            System.out.println("Skill with id \'" + id + "\' not found.");
+        skill = skill != null ? skill : null;
+        return skill;
     }
 }

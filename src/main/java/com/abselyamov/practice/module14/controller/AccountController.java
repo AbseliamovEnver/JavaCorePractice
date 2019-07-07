@@ -20,27 +20,24 @@ public class AccountController {
         accountRepository.add(account);
     }
 
-    public String getById(long id) {
+    public Account getById(long id) {
         Account account = accountRepository.getById(id);
-        if (account != null)
-            return "Account with id \'" + id + "\' have login \'"
-                    + account.getLogin() + "\' and status \'" + account.getStatus() + "\'";
-        return "Account with id \'" + id + "\' not found.";
+        account = account != null ? account : null;
+        return account;
     }
 
-    public String getByName(String login) {
+    public Account getByName(String login) {
         Account account = accountRepository.getByName(login);
-        if (account != null)
-            return "Account with login \'" + account.getLogin() + "\' have id \'"
-                    + account.getId() + "\' and status \'" + account.getStatus() + "\'";
-        return "Account with name \'" + login + "\' not found.";
+        account = account != null ? account : null;
+        return account;
     }
 
     public Set<Account> getListAccounts() {
         Set<Account> accounts = accountRepository.getAll();
         if (accounts != null) {
             for (Account account : accounts)
-                System.out.println(account.getId() + "\t" + account.getLogin() + "\t" + account.getStatus());
+                System.out.println("Account id:\t" + account.getId() + "\tlogin: "
+                        + account.getLogin() + "\tstatus: " + account.getStatus());
             return accounts;
         } else System.out.println("List accounts is empty.");
         return null;
@@ -59,13 +56,10 @@ public class AccountController {
 
     }
 
-    public void delete(Long id) {
+    public Account delete(Long id) {
         Account account = accountRepository.delete(id);
-        if (account != null)
-            System.out.println("Account with id \'" + account.getId() + "\' and login \'"
-                    + account.getLogin() + "\' deleted successfully.");
-        else
-            System.out.println("Account with id \'" + id + "\' not found.");
+        account = account != null ? account : null;
+        return account;
     }
 
     public boolean checkAccount(Long id, String pass) {

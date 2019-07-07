@@ -25,7 +25,6 @@ public class JavaIOAccountRepositoryImpl implements AccountRepository {
                         addAccount = false;
                 }
             }
-
             if (addAccount) {
                 account.setId(GetID.getID(Account.ACCOUNTS_FILE));
                 writer.write(account.getId() + "\t" + account.getLogin() + "\t"
@@ -153,7 +152,6 @@ public class JavaIOAccountRepositoryImpl implements AccountRepository {
         Set<Account> accounts = new HashSet<>();
         Account accountDelete = null;
         String data;
-        boolean deleteAccount = false;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(Account.ACCOUNTS_FILE))) {
             File file = new File(Account.ACCOUNTS_FILE);
@@ -163,23 +161,19 @@ public class JavaIOAccountRepositoryImpl implements AccountRepository {
                     if (Long.parseLong(accountData[0]) == id) {
                         accountDelete = new Account(id, accountData[1],
                                 accountData[2], AccountStatus.valueOf(accountData[3]));
-                        deleteAccount = true;
                         continue;
                     }
                     accounts.add(new Account(Long.parseLong(accountData[0]),
                             accountData[1], accountData[2], AccountStatus.valueOf(accountData[3])));
                 }
             }
-
         } catch (IOException e) {
             System.out.println("Exception reading from file in method delete account: " + e);
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(Account.ACCOUNTS_FILE, false))) {
-            if (deleteAccount) {
-                for (Account account : accounts)
-                    writer.write(account.getId() + "\t"
-                            + account.getLogin() + "\t" + account.getPassword() + "\t" + account.getStatus() + "\n");
-            }
+            for (Account account : accounts)
+                writer.write(account.getId() + "\t"
+                        + account.getLogin() + "\t" + account.getPassword() + "\t" + account.getStatus() + "\n");
         } catch (IOException e) {
             System.out.println("Exception writing file in method delete account: " + e);
         }

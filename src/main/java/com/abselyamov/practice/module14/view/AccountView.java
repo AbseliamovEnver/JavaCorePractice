@@ -1,6 +1,7 @@
 package com.abselyamov.practice.module14.view;
 
 import com.abselyamov.practice.module14.controller.AccountController;
+import com.abselyamov.practice.module14.model.Account;
 import com.abselyamov.practice.module14.model.AccountStatus;
 import com.abselyamov.practice.module14.utils.PrintMenu;
 import com.abselyamov.practice.module14.utils.ReadInputData;
@@ -32,58 +33,129 @@ public class AccountView {
     public void accountView() {
         AccountController accountController = new AccountController();
         boolean marker = true;
+        boolean menu = true;
+        long select;
+
         while (marker) {
-            long select = accountMenu();
+            select = menu ? accountMenu() : 1;
             switch ((int) select) {
                 case 0:
                     marker = false;
                     break;
                 case 1:
-                    System.out.println("Enter login:");
-                    String login = ReadInputData.readInputString();
-                    System.out.println("Enter password:");
-                    String password = ReadInputData.readInputString();
-                    accountController.getListStatus();
-                    System.out.println("Chose account status:");
-                    long idStatus = ReadInputData.readInputData(0, AccountStatus.values().length - 1);
-                    accountController.add(login, password, idStatus);
+                    System.out.println("If you want to create a new account enter \'Y\' or other key to continue:");
+                    if (ReadInputData.readInputString().equalsIgnoreCase("Y")) {
+                        System.out.println("Enter account login:");
+                        String login = ReadInputData.readInputString();
+                        System.out.println("Enter account password:");
+                        String password = ReadInputData.readInputString();
+                        accountController.getListStatus();
+                        System.out.println("Chose account status:");
+                        long idStatus = ReadInputData.readInputData(0, AccountStatus.values().length - 1);
+                        accountController.add(login, password, idStatus);
+                        menu = false;
+                    } else {
+                        menu = true;
+                    }
                     break;
                 case 2:
-                    System.out.println("Enter account ID: ");
-                    System.out.println(accountController.getById(ReadInputData.readInputData(0, Long.MAX_VALUE)));
+                    if (accountController.getListAccounts() != null) {
+                        System.out.println("Enter account ID or enter \'-1\' to continue: ");
+                        long id;
+                        while ((id = ReadInputData.readInputData(-1, Long.MAX_VALUE)) != -1) {
+                            Account account = accountController.getById(id);
+                            if (account != null) {
+                                System.out.println("Account with id: \'" + id + "\' have login \'"
+                                        + account.getLogin() + "\' and status \'" + account.getStatus() + "\'.");
+                                System.out.println("Select other account id or enter \'-1\' to continue:");
+                            } else {
+                                System.out.println("Account with id \'" + id + "\' not found.");
+                                System.out.println("Select correct account id or enter \'-1\' to continue:");
+                            }
+                        }
+                    } else {
+                        System.out.println("Please create new account.");
+                        menu = false;
+                    }
                     break;
                 case 3:
-                    System.out.println("Enter account login: ");
-                    System.out.println(accountController.getByName(ReadInputData.readInputString()));
+                    System.out.println("Accounts list:");
+                    if (accountController.getListAccounts() != null) {
+                        System.out.println("Enter account login or enter \'-1\' to continue: ");
+                        String loginAcc;
+                        while (!(loginAcc = ReadInputData.readInputString()).equals("-1")) {
+                            Account account = accountController.getByName(loginAcc);
+                            if (account != null) {
+                                System.out.println("Account with login: \'" + loginAcc + "\' have id \'"
+                                        + account.getId() + "\' and status \'" + account.getStatus() + "\'.");
+                                System.out.println("Select other account login or enter \'-1\' to continue:");
+                            } else {
+                                System.out.println("Account with login \'" + loginAcc + "\' not found.");
+                                System.out.println("Select correct account login or enter \'-1\' to continue:");
+                            }
+                        }
+                    } else {
+                        System.out.println("Please create new account.");
+                        menu = false;
+                    }
                     break;
                 case 4:
-                    System.out.println("List accounts: \nID\tACCOUNTS");
-                    accountController.getListAccounts();
+                    System.out.println("List accounts: ");
+                    if (accountController.getListAccounts() == null) {
+                        System.out.println("Please create new account.");
+                        menu = false;
+                    }
                     break;
                 case 5:
-                    System.out.println("Accounts list:");
-                    accountController.getListAccounts();
-                    System.out.println("Choose id account:");
-                    long id = ReadInputData.readInputData(0, Long.MAX_VALUE);
-                    System.out.println("Enter password:");
-                    String pass = ReadInputData.readInputString();
-                    if (accountController.checkAccount(id, pass)) {
-                        System.out.println("Enter new login or press \'ENTER\' to leave old login: ");
-                        String newLogin = ReadInputData.readInputString();
-                        System.out.println("Enter new password or press \'ENTER\' to leave old password: ");
-                        String newPass = ReadInputData.readInputString();
-                        accountController.getListStatus();
-                        System.out.println("Chose new STATUS: ");
-                        long newStatus = ReadInputData.readInputData(0, AccountStatus.values().length - 1);
-                        accountController.update(id, newLogin, newPass, newStatus);
-                    } else System.out.println("You enter wrong password.");
+                    System.out.println("List of all ACCOUNTS:");
+                    if (accountController.getListAccounts() != null) {
+                        System.out.println("Choose account id to update or enter \'-1\' to continue: ");
+                        long accountId;
+                        while ((accountId = ReadInputData.readInputData(-1, Long.MAX_VALUE)) != -1) {
+                            System.out.println("Enter password:");
+                            String password = ReadInputData.readInputString();
+                            if (accountController.checkAccount(accountId, password)) {
+                                System.out.println("Enter new login or press \'ENTER\' to leave old login: ");
+                                String newLogin = ReadInputData.readInputString();
+                                System.out.println("Enter new password or press \'ENTER\' to leave old password: ");
+                                String newPassword = ReadInputData.readInputString();
+                                accountController.getListStatus();
+                                System.out.println("Chose new account STATUS: ");
+                                long newStatus = ReadInputData.readInputData(0, AccountStatus.values().length - 1);
+                                accountController.update(accountId, newLogin, newPassword, newStatus);
+                                System.out.println("Enter account id to update or enter \'-1\' to continue:");
+                            } else {
+                                System.out.println("Account with that id \'" + accountId + "\' and entered password \'"
+                                        + password + "\' not found.\nmay be entered incorrect password.");
+                                System.out.println("Select correct account id and enter correct password or enter \'-1\' to continue:");
+                            }
+                        }
+                    } else {
+                        System.out.println("Please create new account.");
+                        menu = false;
+                    }
                     break;
                 case 6:
                     System.out.println("Accounts list:");
-                    accountController.getListAccounts();
-                    System.out.println("Choose account id to remove:");
-                    long idAccount = ReadInputData.readInputData(0, Long.MAX_VALUE);
-                    accountController.delete(idAccount);
+                    if (accountController.getListAccounts() != null) {
+                        System.out.println("Enter account ID to delete or \'-1\' to continue: ");
+                        long idAccount;
+                        while ((idAccount = ReadInputData.readInputData(-1, Long.MAX_VALUE)) != -1) {
+                            Account account = accountController.delete(idAccount);
+                            if (account != null) {
+                                System.out.println("Account with id: \'" + idAccount + "\', login \'"
+                                        + account.getLogin() + "\' and status "
+                                        + account.getStatus() + " deleted successfully.");
+                                System.out.println("Select other account id or enter \'-1\' to continue:");
+                            } else {
+                                System.out.println("Account with id \'" + idAccount + "\' not found.");
+                                System.out.println("Select correct account id or enter \'-1\' to continue:");
+                            }
+                        }
+                    } else {
+                        System.out.println("Please create new account.");
+                        menu = false;
+                    }
                     break;
                 default:
                     continue;

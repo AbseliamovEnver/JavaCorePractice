@@ -26,7 +26,6 @@ public class JavaIODeveloperRepositoryImpl implements DeveloperRepository {
                         addDeveloper = false;
                 }
             }
-
             if (addDeveloper) {
                 developer.setId(GetID.getID(Developer.DEVELOPER_FILE));
                 writer.write(developer.getId() + "\t" + developer.getName() + "\t"
@@ -84,54 +83,53 @@ public class JavaIODeveloperRepositoryImpl implements DeveloperRepository {
     }
 
     @Override
-    public void update(Developer developer, Long id) {
-        Developer developer1;
-
+    public Developer update(Developer developer, Long id) {
+        Developer updateDeveloper = null;
         File file = new File(Developer.DEVELOPER_FILE);
         if (file.exists() && file.length() != 0) {
             Set<Developer> developers = GetDeveloperList.getDevelopers(file);
-            for (Developer developerItem : developers) {
-                if (developerItem.getId() == id)
-                    developer1 = new Developer(developerItem);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(Developer.DEVELOPER_FILE, false))) {
+                for (Developer developerItem : developers) {
+                    if (developerItem.getId() == id) {
+                        writer.write(developer.getId() + "\t" + developer.getName() + "\t" + developer.getSurName()
+                                + "\t" + developer.getSkills() + "\t" + developer.getAccount() + "\n");
+                        updateDeveloper = developerItem;
+                        continue;
+                    }
+                    writer.write(developerItem.getId() + "\t" + developerItem.getName() + "\t" + developerItem.getSurName()
+                            + "\t" + developerItem.getSkills() + "\t" + developerItem.getAccount() + "\n");
+                }
+            } catch (IOException e) {
+                System.out.println("Exception writing file in method delete developer: " + e);
             }
         }
+        return updateDeveloper;
     }
 
     @Override
     public Developer delete(Long id) {
-        Set<Developer> developers = new HashSet<>();
         Developer developerDelete = null;
-        boolean deleteDeveloper = false;
-
         File file = new File(Developer.DEVELOPER_FILE);
         if (file.exists() && file.length() != 0) {
             Set<Developer> developerList = GetDeveloperList.getDevelopers(file);
-            for (Developer developer : developerList) {
-                if (developer.getId() == id) {
-                    developerDelete = new Developer(developer.getId(), developer.getName(), developer.getSurName(),
-                            developer.getSkills(), developer.getAccount());
-                    deleteDeveloper = true;
-                    continue;
-                }
-                developers.add(new Developer(developer.getId(), developer.getName(), developer.getSurName(),
-                        developer.getSkills(), developer.getAccount()));
-            }
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Developer.DEVELOPER_FILE, false))) {
-            if (deleteDeveloper) {
-                for (Developer developer : developers)
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(Developer.DEVELOPER_FILE, false))) {
+                for (Developer developer : developerList) {
+                    if (developer.getId() == id) {
+                        developerDelete = developer;
+                        continue;
+                    }
                     writer.write(developer.getId() + "\t" + developer.getName() + "\t" + developer.getSurName()
                             + "\t" + developer.getSkills() + "\t" + developer.getAccount() + "\n");
+                }
+            } catch (IOException e) {
+                System.out.println("Exception writing file in method delete developer: " + e);
             }
-        } catch (IOException e) {
-            System.out.println("Exception writing file in method delete developer: " + e);
         }
         return developerDelete;
     }
 
     @Override
-    public boolean addSkillDeveloper(Developer developer, Skill skill) {
+    public boolean addSkillDeveloper(Developer developer, Skill newSkill) {
         Set<Skill> skills = new HashSet<>();
         boolean addSkill = false;
 
@@ -142,7 +140,7 @@ public class JavaIODeveloperRepositoryImpl implements DeveloperRepository {
                 for (Developer developerItem : developerList) {
                     if (developerItem.getId() == developer.getId()) {
                         skills = developer.getSkills();
-                        skills.add(skill);
+                        skills.add(newSkill);
                         writer.write(developer.getId() + "\t" + developer.getName() + "\t" + developer.getSurName()
                                 + "\t" + skills + "\t" + developer.getAccount() + "\n");
                         addSkill = true;

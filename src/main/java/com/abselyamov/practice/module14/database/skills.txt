@@ -1,2 +1,2 @@
-1	www
-2	eeeeeeee
+0	Git
+1	SQL

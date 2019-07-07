@@ -24,10 +24,10 @@ public class JavaIOSkillRepositoryImpl implements SkillRepository {
                         addSkill = false;
                 }
             }
-
             if (addSkill) {
                 skill.setId(GetID.getID(Skill.SKILLS_FILE));
                 writer.write(skill.getId() + "\t" + skill.getSkillName() + "\n");
+                System.out.println("Skill added is successful");
                 writer.flush();
             } else System.out.println("This skill already exists");
         } catch (FileNotFoundException e) {
@@ -103,7 +103,6 @@ public class JavaIOSkillRepositoryImpl implements SkillRepository {
         Set<Skill> skills = new HashSet<>();
         Skill skillDelete = null;
         String data;
-        boolean deleteSkill = false;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(Skill.SKILLS_FILE))) {
             File file = new File(Skill.SKILLS_FILE);
@@ -112,7 +111,6 @@ public class JavaIOSkillRepositoryImpl implements SkillRepository {
                     String[] skillData = data.split("\t");
                     if (Long.parseLong(skillData[0]) == id) {
                         skillDelete = new Skill(id, skillData[1]);
-                        deleteSkill = true;
                         continue;
                     }
                     skills.add(new Skill(Long.parseLong(skillData[0]), skillData[1]));
@@ -123,10 +121,8 @@ public class JavaIOSkillRepositoryImpl implements SkillRepository {
             System.out.println("Exception reading from file in method delete skill: " + e);
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(Skill.SKILLS_FILE, false))) {
-            if (deleteSkill) {
-                for (Skill skill : skills)
-                    writer.write(skill.getId() + "\t" + skill.getSkillName() + "\n");
-            }
+            for (Skill skill : skills)
+                writer.write(skill.getId() + "\t" + skill.getSkillName() + "\n");
         } catch (IOException e) {
             System.out.println("Exception writing file in method delete skill: " + e);
         }

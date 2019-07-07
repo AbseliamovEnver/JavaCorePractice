@@ -6,7 +6,6 @@ import com.abselyamov.practice.module14.model.Skill;
 import com.abselyamov.practice.module14.repository.DeveloperRepository;
 import com.abselyamov.practice.module14.repository.JavaIODeveloperRepositoryImpl;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class DeveloperController {
@@ -17,22 +16,18 @@ public class DeveloperController {
         developerRepository.add(developer);
     }
 
-    public String getById(long id) {
+    public Developer getById(long id) {
         Developer developer = developerRepository.getById(id);
         if (developer != null)
-            return "Developer with id = \'" + id + "\' have:\nname = \'" + developer.getName() + "\'\nsurname = \'"
-                    + developer.getSurName() + "\'\nskill(s):\n\t" + developer.getSkills() + "\naccount:\n"
-                    + developer.getAccount();
-        return "Developer with id = \'" + id + "\' not found.";
+            return developer;
+        return developer;
     }
 
-    public String getByName(String name) {
+    public Developer getByName(String name) {
         Developer developer = developerRepository.getByName(name);
         if (developer != null)
-            return "Developer with name = \'" + developer.getName() + "\' have:\nid = \'" + developer.getId()
-                    + "\'\nsurname = \'" + developer.getSurName() + "\'\nskill(s):\n\t" + developer.getSkills()
-                    + "\naccount:\n\t" + developer.getAccount();
-        return "Developer with name = \'" + name + "\' not found.";
+            return developer;
+        return developer;
     }
 
     public Set<Developer> getListDeveloper() {
@@ -45,48 +40,57 @@ public class DeveloperController {
         return null;
     }
 
-    public void update(String name, String surname) {
-
-    }
-
-    public void delete(long id) {
-        Developer developer = developerRepository.delete(id);
-        if (developer != null)
-            System.out.println("Developer with id \'" + developer.getId() + "\' and name \'"
-                    + developer.getName() + "\' deleted successfully.");
+    public void update(long id, String name, String surname) {
+        Developer developer = developerRepository.getById(id);
+        Developer updateDeveloper = developerRepository.update(new Developer(id,
+                name, surname, developer.getSkills(), developer.getAccount()), id);
+        if (updateDeveloper != null)
+            System.out.println("Developer with id \'" + updateDeveloper.getId() + "\' and name \'"
+                    + updateDeveloper.getName() + "\' update successfully.");
         else
             System.out.println("Developer with id \'" + id + "\' not found.");
+    }
+
+    public Developer delete(long id) {
+        Developer developer = developerRepository.delete(id);
+        if (developer != null)
+            return developer;
+        return developer;
     }
 
     public boolean checkDeveloper(long id) {
-        boolean result = false;
         Developer developer = developerRepository.getById(id);
         if (developer != null)
             return true;
-        else
-            System.out.println("Developer with id \'" + id + "\' not found.");
-        return result;
+        return false;
     }
 
-    public boolean checkDeveloperSkill(Set<Skill> skills, long id) {
-        Developer developer = developerRepository.getById(id);
+    public boolean checkDeveloperSkill(Set<Skill> skills, long idSkill, long idDeveloper) {
+        Developer developer = developerRepository.getById(idDeveloper);
         Set<Skill> developerSkills = developer.getSkills();
-        boolean addSkill = true;
-        Skill skillItem = null;
+        boolean skillExist = false;
+        boolean idSkillExist = false;
+        Skill newSkill = null;
 
         for (Skill skill : skills) {
-            if (skill.getId() == id) {
-                skillItem = new Skill(skill.getId(), skill.getSkillName());
-                for (Skill skill1 : developerSkills) {
-                    if (skill1.getId() == id) {
-                        System.out.println("This skill already exist.");
-                        addSkill = false;
+            if (skill.getId() == idSkill) {
+                idSkillExist = true;
+                newSkill = new Skill(skill.getId(), skill.getSkillName());
+                for (Skill skillList : developerSkills) {
+                    if (skillList.getId() == idSkill) {
+                        skillExist = true;
+                        break;
                     }
                 }
             }
         }
-        if (addSkill)
-            return developerRepository.addSkillDeveloper(developer, skillItem);
-        return false;
+        if (!idSkillExist) {
+            System.out.println("Skill with id \'" + idSkill + "\' not found");
+            return false;
+        } else if (skillExist) {
+            System.out.println("This skill already exist.");
+            return false;
+        }
+        return developerRepository.addSkillDeveloper(developer, newSkill);
     }
 }

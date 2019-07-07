@@ -5,7 +5,7 @@ import com.abselyamov.practice.module14.model.Skill;
 
 public interface DeveloperRepository extends GenericRepository<Developer, Long> {
 
-    void update(Developer developer, Long id);
+    Developer update(Developer developer, Long id);
 
     Developer getByName(String name);
 
